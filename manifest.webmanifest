@@ -1,0 +1,33 @@
+{
+  "name": "Boutique Management System",
+  "gcm_sender_id": "82407299590",
+  "short_name": "BMS",
+  "icons": [
+    {
+      "src": "img/core-img/maskable_icon_x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+      
+    },
+    {
+      "src": "img/core-img/maskable_icon_x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },  
+    {
+      "src": "img/core-img/maskable_icon_x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "img/core-img/maskable_icon_x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "start_url": "/"
+}
