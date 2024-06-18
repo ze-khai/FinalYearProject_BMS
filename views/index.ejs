@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <!-- Title  -->
+        <title>Khai Boutique | Home</title>
+
+        <!-- Favicon  -->
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+
+        <!-- Core Style CSS -->
+        <link rel="stylesheet" href="/css/core-style.css" />
+        <!-- <link rel="stylesheet" href="/style.css"> -->
+
+        <!-- Responsive CSS -->
+        <link href="/css/responsive.css" rel="stylesheet" />
+
+        <style>
+            #fb-btn {
+                top: 30px;
+                left: 20px;
+            }
+
+            #profile {
+                position: absolute;
+                top: 30px;
+                left: 70px;
+                display: none;
+            }
+
+            #empId {
+                position: absolute;
+                top: 30px;
+                left: 70px;
+            }
+
+            #login {
+                position: absolute;
+                top: 30px;
+                left: 100px;
+            }
+
+            .MapHeading {
+                padding: 15px;
+            }
+            .kuang3 {
+                background-image: url("/img/bg-img/location.jpg");
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%;
+                padding: 5%;
+            }
+        </style>
+        <script>
+            <% if(user.Id && user.role) { %>
+                var Id = "<%= user.Id %>";
+                console.log(Id);
+                var role = "<%= user.role %>";
+                console.log(role);
+            <% }; %>
+        </script>
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <!-- ****** Header Area Start ****** -->
+            <header
+                class="header_area bg-img background-overlay-white"
+                style="background-image: url(/img/bg-img/bg-1.jpg)"
+            >
+                <!-- Top Header Area Start -->
+                <div class="top_header_area">
+                    <div class="container h-100">
+                        <% if(user.Id == null){ %>
+                        <a id="login" href="/login">Login</a>
+                        <% }; %>
+                        <!-- <div class="fb-login-button" id='fb-btn' scope="public_profile,email,user_birthday"
+                        onlogin="checkLoginState();" data-width="" data-size="medium" data-button-type="login_with"
+                        data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div> -->
+                        <% if(user.Id != null){ %>
+                        <div class="LogNavigation">
+                            <a class="button" href="/logout">
+                                <img src="/img/core-img/logout.png" />
+
+                                <div class="logout">LOGOUT</div>
+                            </a>
+                        </div>
+                        <% } else {%>
+                        <div class="LogNavigation">
+                            <a class="button" id="logout" href="#" onclick="logout()">
+                                <img src="/img/core-img/logout.png" />
+
+                                <div class="logout">LOGOUT</div>
+                            </a>
+                        </div>
+                        <% }; %> <% if(user.Id != null) { %>
+                        <p id="empId">Welcome, <%= user.Id %></p>
+                        <% }; %>
+                        <a id="profile" href="#profileD" data-toggle="modal">Profile</a>
+                        <div class="row h-100 align-items-center justify-content-end">
+                            <div class="col-12 col-lg-7">
+                                <div class="top_single_area d-flex align-items-center">
+                                    <!-- Logo Area -->
+                                    <div class="top_logo">
+                                        <a href="#"><img src="img/core-img/logo.png" alt="" /></a>
+                                    </div>
+                                    <!-- Cart & Menu Area -->
+                                    <div class="header-cart-menu d-flex align-items-center ml-auto">
+                                        <!-- Cart Area -->
+                                        <div class="cart">
+                                            <% console.log( cartItem[0]) %> <% if(typeof cartItem[0] === 'undefined') {
+                                            %>
+                                            <a href="#" id="header-cart-btn" target="_blank"
+                                                ><span class="cart_quantity">0</span><i class="ti-bag"></i> Your Bag
+                                                RM0.00</a
+                                            >
+                                            <ul class="cart-list">
+                                                <li class="total">
+                                                    <span class="pull-right">Total: RM0.00</span>
+                                                    <a href="/cart" class="btn btn-sm btn-cart">Cart</a>
+                                                    <a href="/checkout" class="btn btn-sm btn-checkout">Checkout</a>
+                                                </li>
+                                            </ul>
+                                            <% } else { %> <% var totalPrice = 0; %> <% cartItem.forEach(cartItem =>
+                                            totalPrice += cartItem.price * cartItem.quantity); %>
+                                            <a href="#" id="header-cart-btn" target="_blank"
+                                                ><span class="cart_quantity"><%= cartItem.length %></span
+                                                ><i class="ti-bag"></i> Your Bag RM<%= parseFloat(totalPrice).toFixed(2)
+                                                %></a
+                                            >
+                                            <ul class="cart-list">
+                                                <% cartItem.forEach(cartItem =>{ %>
+                                                <li>
+                                                    <a href="#" class="image"
+                                                        ><img
+                                                            src="/img/product-img/<%= cartItem.productImg %>"
+                                                            class="cart-thumb"
+                                                            alt=""
+                                                    /></a>
+                                                    <div class="cart-item-desc">
+                                                        <h6><a href="#"><%= cartItem.productName %></a></h6>
+                                                        <p>
+                                                            <%= cartItem.quantity %>x -
+                                                            <span class="price">RM<%= cartItem.price %></span>
+                                                        </p>
+                                                    </div>
+                                                    <span class="dropdown-product-remove"
+                                                        ><i class="icon-cross"></i
+                                                    ></span>
+                                                </li>
+                                                <% }); %>
+                                                <li class="total">
+                                                    <span class="pull-right"
+                                                        >Total: RM<%= parseFloat(totalPrice).toFixed(2) %></span
+                                                    >
+                                                    <a href="/cart" class="btn btn-sm btn-cart">Cart</a>
+                                                    <a href="/checkout" class="btn btn-sm btn-checkout">Checkout</a>
+                                                </li>
+                                            </ul>
+                                            <% }; %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="profileD" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Profile</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="<%= userCust.pic %>" />
+                                <br />
+                                <br />
+                                <label>Name: </label>
+                                <label id="fbName"><%= userCust.name %></label>
+                                <br />
+                                <label>ID: </label>
+                                <label id="fbId"><%= userCust.userID %></label>
+                                <br />
+                                <label>Email: </label>
+                                <label><%= userCust.email %></label>
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Header Area End -->
+                <div class="main_header_area">
+                    <div class="container h-100">
+                        <div class="row h-100">
+                            <div class="col-12 d-md-flex justify-content-between">
+                                <!-- Header Social Area -->
+                                <div class="header-social-area">
+                                    <a href="#" hidden="true"
+                                        ><span class="karl-level">Share</span>
+                                        <i class="fa fa-pinterest" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.facebook.com"
+                                        ><i class="fa fa-facebook" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.twitter.com"
+                                        ><i class="fa fa-twitter" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.linkedin.com"
+                                        ><i class="fa fa-linkedin" aria-hidden="true"></i
+                                    ></a>
+                                </div>
+                                <!-- Menu Area -->
+                                <div class="main-menu-area">
+                                    <nav class="navbar navbar-expand-lg align-items-start">
+                                        <button
+                                            class="navbar-toggler"
+                                            type="button"
+                                            data-toggle="collapse"
+                                            data-target="#karl-navbar"
+                                            aria-controls="karl-navbar"
+                                            aria-expanded="false"
+                                            aria-label="Toggle navigation"
+                                        >
+                                            <span class="navbar-toggler-icon"><i class="ti-menu"></i></span>
+                                        </button>
+
+                                        <div
+                                            class="collapse navbar-collapse align-items-start collapse"
+                                            id="karl-navbar"
+                                        >
+                                            <ul class="navbar-nav animated" id="nav">
+                                                <li class="nav-item active">
+                                                    <% if(user.Id != null) { %>
+                                                    <a class="nav-link" href="/">Home</a>
+                                                    <% } else { %>
+                                                    <a class="nav-link" href="/">Home</a>
+                                                    <% }; %>
+                                                </li>
+                                                <li class="nav-item dropdown">
+                                                    <a
+                                                        class="nav-link"
+                                                        href="/categories"
+                                                        id="karlDropdown"
+                                                        role="button"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false"
+                                                        >Categories</a
+                                                    >
+                                                </li>
+                                                <li class="nav-item"><a class="nav-link" href="/cart"> Cart</a></li>
+                                                <% if(user.Id != null) { %>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/product">Inventory Management</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/orderHistory/<%= user.Id %>"
+                                                        >Order History</a
+                                                    >
+                                                </li>
+                                                <% } else{ %>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/orderHistory/<%= userCust.userID %> "
+                                                        >Order History</a
+                                                    >
+                                                </li>
+                                                <% } %>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/checkout">Checkout</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <!-- Help Line -->
+                                <div class="help-line">
+                                    <a href="tel:+346573556778"><i class="ti-headphone-alt"></i> +34 657 3556 778</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- ****** Header Area End ****** -->
+            <!-- ****** Top Discount Area Start ****** -->
+            <section class="top-discount-area d-md-flex align-items-center">
+                <!-- Single Discount Area -->
+                <div class="single-discount-area">
+                    <h5>Free Shipping &amp; Returns</h5>
+                    <h6>BUY NOW</h6>
+                </div>
+                <!-- Single Discount Area -->
+                <div class="single-discount-area">
+                    <h5>20% Discount for KIDS Tops</h5>
+                    <h6>Have a look NOW</h6>
+                </div>
+                <!-- Single Discount Area -->
+                <div class="single-discount-area">
+                    <h5>New Arrivals of Woman Wears</h5>
+                    <h6>Let's go to buy</h6>
+                </div>
+            </section>
+            <!-- ****** Top Discount Area End ****** -->
+
+            <!-- ****** Welcome Slides Area Start ****** -->
+            <section class="welcome_area">
+                <div class="welcome_slides owl-carousel">
+                    <!-- Single Slide Start -->
+                    <div
+                        class="single_slide height-800 bg-img background-overlay"
+                        style="background-image: url(img/bg-img/bg-1.jpg)"
+                    >
+                        <div class="container h-100">
+                            <div class="row h-100 align-items-center">
+                                <div class="col-12">
+                                    <div class="welcome_slide_text">
+                                        <h6 data-animation="bounceInDown" data-delay="0" data-duration="500ms">
+                                            * Only today we offer free shipping
+                                        </h6>
+                                        <h2 data-animation="fadeInUp" data-delay="500ms" data-duration="500ms">
+                                            Fashion Trends
+                                        </h2>
+                                        <a
+                                            href="/categories"
+                                            class="btn karl-btn"
+                                            data-animation="fadeInUp"
+                                            data-delay="1s"
+                                            data-duration="500ms"
+                                            >Shop Now</a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Slide Start -->
+                    <div
+                        class="single_slide height-800 bg-img background-overlay"
+                        style="background-image: url(img/bg-img/bg-4.jpg)"
+                    >
+                        <div class="container h-100">
+                            <div class="row h-100 align-items-center">
+                                <div class="col-12">
+                                    <div class="welcome_slide_text">
+                                        <h6 data-animation="fadeInDown" data-delay="0" data-duration="500ms">
+                                            * Only today we offer free shipping
+                                        </h6>
+                                        <h2 data-animation="fadeInUp" data-delay="500ms" data-duration="500ms">
+                                            Summer Collection
+                                        </h2>
+                                        <a
+                                            href="/categories"
+                                            class="btn karl-btn"
+                                            data-animation="fadeInLeftBig"
+                                            data-delay="1s"
+                                            data-duration="500ms"
+                                            >Check Collection</a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Slide Start -->
+                    <div
+                        class="single_slide height-800 bg-img background-overlay"
+                        style="background-image: url(img/bg-img/bg-2.jpg)"
+                    >
+                        <div class="container h-100">
+                            <div class="row h-100 align-items-center">
+                                <div class="col-12">
+                                    <div class="welcome_slide_text">
+                                        <h6 data-animation="fadeInDown" data-delay="0" data-duration="500ms">
+                                            * Only today we offer free shipping
+                                        </h6>
+                                        <h2 data-animation="bounceInDown" data-delay="500ms" data-duration="500ms">
+                                            Women Fashion
+                                        </h2>
+                                        <a
+                                            href="/categories"
+                                            class="btn karl-btn"
+                                            data-animation="fadeInRightBig"
+                                            data-delay="1s"
+                                            data-duration="500ms"
+                                            >Check Collection</a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ****** Welcome Slides Area End ****** -->
+
+            <!-- ****** Top Catagory Area Start ****** -->
+            <section class="top_catagory_area d-md-flex clearfix">
+                <!-- Single Catagory -->
+                <div
+                    class="single_catagory_area d-flex align-items-center bg-img"
+                    style="background-image: url(img/bg-img/bg-2.jpg)"
+                >
+                    <div class="catagory-content">
+                        <h6>On Kids Tops</h6>
+                        <h2>Sale 20%</h2>
+                        <a href="/categories" class="btn karl-btn">SHOP NOW</a>
+                    </div>
+                </div>
+                <!-- Single Catagory -->
+                <div
+                    class="single_catagory_area d-flex align-items-center bg-img"
+                    style="background-image: url(img/bg-img/bg-3.jpg)"
+                >
+                    <div class="catagory-content">
+                        <h6>in Women Accesories excepting the new collection</h6>
+                        <h2>Designer bags</h2>
+                        <a href="/categories" class="btn karl-btn">SHOP NOW</a>
+                    </div>
+                </div>
+            </section>
+            <!-- ****** Top Catagory Area End ****** -->
+
+            <!-- ****** New Arrivals Area Start ****** -->
+            <section class="new_arrivals_area section_padding_100_0 clearfix">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section_heading text-center">
+                                <h2>New Arrivals</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="karl-projects-menu mb-100">
+                    <div class="text-center portfolio-menu">
+                        <button class="btn active" data-filter="*">ALL</button>
+                        <button class="btn" data-filter=".women">WOMAN</button>
+                        <button class="btn" data-filter=".man">MAN</button>
+                        <button class="btn" data-filter=".kids">KIDS</button>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row karl-new-arrivals">
+                        <!-- Single gallery Item Start -->
+                        <div
+                            class="col-12 col-sm-6 col-md-4 single_gallery_item man wow fadeInUpBig"
+                            data-wow-delay="0.2s"
+                        >
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="/img/product-img/1647876217828-800787271-Crew-Short-Sleeve.jpg" alt="" />
+                                <div class="product-quicview">
+                                    <a href="/productDetail/S10_4698"><i class="ti-plus"></i></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <h4 class="product-price">RM21.50</h4>
+                                <p>Crew Short Sleeve</p>
+                                <!-- Add to Cart -->
+                            </div>
+                        </div>
+
+                        <!-- Single gallery Item Start -->
+                        <div
+                            class="col-12 col-sm-6 col-md-4 single_gallery_item women wow fadeInUpBig"
+                            data-wow-delay="0.3s"
+                        >
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img
+                                    src="/img/product-img/1647791848438-434002280-Waterfall-Collar-Double Breasted-Trench-Coat.jpg"
+                                    alt=""
+                                />
+                                <div class="product-quicview">
+                                    <a href="/productDetail/S10_4757"><i class="ti-plus"></i></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <h4 class="product-price">RM88.70</h4>
+                                <p>Waterfall Collar Double Breasted Trench Coat</p>
+                                <!-- Add to Cart -->
+                            </div>
+                        </div>
+
+                        <!-- Single gallery Item Start -->
+                        <div
+                            class="col-12 col-sm-6 col-md-4 single_gallery_item women wow fadeInUpBig"
+                            data-wow-delay="0.4s"
+                        >
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="img/product-img/1648233581527-710895794-Lace-Trimed-V-Neck-Tee.png" alt="" />
+                                <div class="product-quicview">
+                                    <a href="/productDetail/S10_4962"><i class="ti-plus"></i></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <h4 class="product-price">RM60.30</h4>
+                                <p>Lace Trimed V Neck Tee</p>
+                                <!-- Add to Cart -->
+                            </div>
+                        </div>
+
+                        <!-- Single gallery Item Start -->
+                        <div
+                            class="col-12 col-sm-6 col-md-4 single_gallery_item man wow fadeInUpBig"
+                            data-wow-delay="0.5s"
+                        >
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img
+                                    src="img/product-img/1648233607106-180281510-Men-Solid-Slant-Pocket-Tapered-Pants.png"
+                                    alt=""
+                                />
+                                <div class="product-quicview">
+                                    <a href="/productDetail/S11_1234"><i class="ti-plus"></i></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <h4 class="product-price">RM130.90</h4>
+                                <p>Men Solid Slant Pocket Tapered Pants</p>
+                                <!-- Add to Cart -->
+                            </div>
+                        </div>
+
+                        <!-- Single gallery Item Start -->
+                        <div
+                            class="col-12 col-sm-6 col-md-4 single_gallery_item kids wow fadeInUpBig"
+                            data-wow-delay="0.6s"
+                        >
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img
+                                    src="img/product-img/1648233659392-600168885-Boys-Drawstring-Waist-Color-Block-Shorts.png"
+                                    alt=""
+                                />
+                                <div class="product-quicview">
+                                    <a href="/productDetail/S12_2823"><i class="ti-plus"></i></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <h4 class="product-price">RM40.30</h4>
+                                <p>Boys Drawstring Waist Color Block Shorts</p>
+                                <!-- Add to Cart -->
+                            </div>
+                        </div>
+
+                        <!-- Single gallery Item -->
+                        <div
+                            class="col-12 col-sm-6 col-md-4 single_gallery_item women wow fadeInUpBig"
+                            data-wow-delay="0.7s"
+                        >
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img
+                                    src="img/product-img/1648233639757-752999480-DAZY-Elastic-Waist-Solid-Mermaid-Skirt.png"
+                                    alt=""
+                                />
+                                <div class="product-quicview">
+                                    <a href="/productDetail/S12_1108"><i class="ti-plus"></i></a>
+                                </div>
+                            </div>
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <h4 class="product-price">RM70.70</h4>
+                                <p>DAZY Elastic Waist Solid Mermaid Skirt</p>
+                                <!-- Add to Cart -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ****** New Arrivals Area End ****** -->
+
+            <!-- ****** Offer Area Start ****** -->
+            <section
+                class="offer_area height-700 section_padding_100 bg-img"
+                style="background-image: url(img/bg-img/bg-5.jpg)"
+            >
+                <div class="container h-100">
+                    <div class="row h-100 align-items-end justify-content-end">
+                        <div class="col-12 col-md-8 col-lg-6">
+                            <div class="offer-content-area wow fadeInUp" data-wow-delay="1s">
+                                <h2>White t-shirt <span class="karl-level">Hot</span></h2>
+                                <p>* Free shipping until 25 Dec 2022</p>
+                                <div class="offer-product-price">
+                                    <h3><span class="regular-price">RM25.90</span> RM21.50</h3>
+                                </div>
+                                <a href="/productDetail/S10_4698" class="btn karl-btn mt-30">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ****** Offer Area End ****** -->
+            <div class="kuang3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section_heading text-center">
+                                <div class="mapouter">
+                                    <div class="gmap_canvas">
+                                        <div class="MapHeading"><h1>Store Location</h1></div>
+                                        <iframe
+                                            width="699"
+                                            height="716"
+                                            id="gmap_canvas"
+                                            src="https://maps.google.com/maps?q=Kampar&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                                            frameborder="0"
+                                            scrolling="no"
+                                            marginheight="0"
+                                            marginwidth="0"
+                                        >
+                                        </iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .mapouter {
+                        position: relative;
+                        text-align: center;
+                        height: 550px;
+                        width: 550px;
+                    }
+                    .gmap_canvas {
+                        overflow: hidden;
+                        background: none !important;
+                        height: 550px;
+                        width: 550px;
+                    }
+                </style>
+            </div>
+
+            <!-- ****** Popular Brands Area Start ****** -->
+
+            <!-- ****** Footer Area Start ****** -->
+            <footer class="footer_area">
+                <div class="container">
+                    <div class="row">
+                        <!-- Single Footer Area Start -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="single_footer_area">
+                                <div class="footer-logo">
+                                    <img src="/img/core-img/logo.png" alt="" />
+                                </div>
+                                <div class="copywrite_text d-flex align-items-center">
+                                    <p>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                        Copyright &copy;
+                                        <script>
+                                            document.write(new Date().getFullYear());
+                                        </script>
+                                        All rights reserved | Made with
+                                        <i class="fa fa-heart-o" aria-hidden="true"></i> by
+                                        <a href="https://colorlib.com" target="_blank">Colorlib</a> &amp; distributed by
+                                        <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Single Footer Area Start -->
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                            <div class="single_footer_area">
+                                <ul class="footer_widget_menu">
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/categories">Categories</a></li>
+                                    <li><a href="/cart">Cart</a></li>
+                                    <li><a href="/orderHistory/<%= userCust.userID %>">Order History</a></li>
+                                    <li><a href="/checkout">Checkout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Single Footer Area Start -->
+                    </div>
+                    <div class="line"></div>
+
+                    <!-- Footer Bottom Area Start -->
+                    <div class="footer_bottom_area">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="footer_social_area text-center">
+                                    <a href="https://www.facebook.com "
+                                        ><i class="fa fa-facebook" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.twitter.com"
+                                        ><i class="fa fa-twitter" aria-hidden="true"></i
+                                    ></a>
+                                    <a href=" https://www.linkedin.com"
+                                        ><i class="fa fa-linkedin" aria-hidden="true"></i
+                                    ></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- ****** Footer Area End ****** -->
+        </div>
+        <!-- /.wrapper end -->
+
+        <!-- jQuery (Necessary for All JavaScript Plugins) -->
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="/js/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="/js/bootstrap.min.js"></script>
+        <!-- Plugins js -->
+        <script src="/js/plugins.js"></script>
+        <script src="/js/fb.js"></script>
+
+        <!-- Active js -->
+        <script src="/js/active.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+        <!--Start of Tawk.to Script-->
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {},
+                Tawk_LoadStart = new Date();
+            (function () {
+                var s1 = document.createElement("script"),
+                    s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = "https://embed.tawk.to/5f567ba44704467e89ece0df/default";
+                s1.charset = "UTF-8";
+                s1.setAttribute("crossorigin", "*");
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        </script>
+        <!--End of Tawk.to Script-->
+    </body>
+</html>

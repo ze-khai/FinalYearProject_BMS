@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/animate.css" />
+
+        <title><%= title %></title>
+
+        <link rel="stylesheet" href="/css/updatePage.css" />
+        <link href="/css/responsive.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="bg-contact2" style="background-image: url('/img/bg-img/bg-01.jpg')">
+            <div class="container-contact2">
+                <div class="wrap-contact2">
+                    <form
+                        action="/update"
+                        class="contact2-form validate-form"
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+                        <span class="contact2-form-title"> <%= title %> </span>
+                        <center>
+                            <img
+                                src="/img/product-img/<%= product.productImg %>"
+                                alt="No Product Image uploaded"
+                                style="width: 300px; height: 300px; padding-bottom: 10px; text-align: center"
+                            />
+                        </center>
+                        <div class="wrap-input2 validate-input">
+                            <input
+                                class="input2"
+                                type="text"
+                                id="productCode"
+                                readonly
+                                value="<%= product.productCode %>"
+                                name="productCode"
+                            />
+                            <span class="focus-input2" data-placeholder="Product Code (Read Only)"></span>
+                        </div>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input class="input2" type="text" value="<%= product.productName %>" name="productName" />
+                            <span class="focus-input2" data-placeholder="Product Name"></span>
+                        </div>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <select name="category" required>
+                                <% if(product.category == "Men") { %>
+                                <option selected><%= product.category %></option>
+                                <option value="Women">Women</option>
+                                <option value="Kids">Kids</option>
+                                <% } %> <% if(product.category == "Women") { %>
+                                <option selected><%= product.category %></option>
+                                <option value="Men">Men</option>
+                                <option value="Kids">Kids</option>
+                                <% } %> <% if(product.category == "Kids") { %>
+                                <option selected><%= product.category %></option>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                                <% } %>
+                            </select>
+                            <span class="focus-input2" data-placeholder="Category"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <select name="productType" required>
+                                <% if(product.productType == "Tops") { %>
+                                <option selected><%= product.productType %></option>
+                                <option value="Outwear">Outwear</option>
+                                <option value="Bottoms">Bottoms</option>
+                                <option value="Accesories">Accessories</option>
+                                <% } %> <% if(product.productType == "Outwear") { %>
+                                <option selected><%= product.productType %></option>
+                                <option value="Tops">Tops</option>
+                                <option value="Bottoms">Bottoms</option>
+                                <option value="Accesories">Accessories</option>
+                                <% } %> <% if(product.productType == "Bottoms") { %>
+                                <option selected><%= product.productType %></option>
+                                <option value="Outwear">Outwear</option>
+                                <option value="Tops">Tops</option>
+                                <option value="Accesories">Accessories</option>
+                                <% } %> <% if(product.productType == "Accessories") { %>
+                                <option selected><%= product.productType %></option>
+                                <option value="Outwear">Outwear</option>
+                                <option value="Bottoms">Bottoms</option>
+                                <option value="Tops">Tops</option>
+                                <% } %>
+                            </select>
+                            <span class="focus-input2" data-placeholder="Product Type"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <textarea class="input2" name="productDescription" rows="5" cols="60">
+<%= product.productDescription %></textarea
+                            >
+                            <span class="focus-input2" data-placeholder="Product Description"></span>
+                        </div>
+
+                        <!-- <script type="text/javascript">
+                            <% size.forEach(size => { %>
+                                
+
+                            <% }); %>
+                        </script> -->
+                        <% if(size.length != 0) { %> <% var sizes = []; %> <% for(let i=0; i < size.length; i++){ %> <%
+                        sizes.push(size[i].size); %>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                hidden="true"
+                                type="text"
+                                value="<%= size[i].size %>"
+                                name="size<%= size[i].size %>"
+                            />
+                            <input
+                                class="input2"
+                                type="number"
+                                value="<%= size[i].quantity %>"
+                                name="quantity<%= i %>"
+                            />
+                            <span class="focus-input2" data-placeholder="Quantity Stock (<%= size[i].size %>)"></span>
+                        </div>
+                        <% }}else{ %>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="number"
+                                value="<%= product.quantityInStock %>"
+                                name="quantityInStock"
+                            />
+                            <span class="focus-input2" data-placeholder="Quantity In Stock"></span>
+                        </div>
+                        <% }; %>
+                        <input class="input2" hidden="true" type="text" value="<%= sizes %>" name="sizes" />
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input class="input2" type="number" step="0.01" value="<%= product.price %>" name="price" />
+                            <span class="focus-input2" data-placeholder="Price"></span>
+                        </div>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="file"
+                                value="<%= product.productImg %>"
+                                name="productImg"
+                                accept="image/*"
+                            />
+                            <span class="focus-input2" data-placeholder="Product Image"></span>
+                        </div>
+                        <div class="container-contact2-form-btn">
+                            <div class="wrap-contact2-form-btn">
+                                <div class="contact2-form-bgbtn"></div>
+                                <button type="submit" class="contact2-form-btn">Update the Product</button>
+                            </div>
+                            <a href="/product" class="btn btn btn-info">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="/js/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="/js/bootstrap.min.js"></script>
+        <!-- Plugins js -->
+        <script src="/js/plugins.js"></script>
+        <!-- Active js -->
+        <script src="/js/active.js"></script>
+        <script src="/js/update.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+        <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag("js", new Date());
+
+                    gtag("config", "UA-23581568-13");
+
+                    // updateForm.onsubmit = async (e) => {
+                    //  e.preventDefault();
+
+                    // let response = await fetch('/update', {
+                    //  method: 'POST',
+                    //  body: new FormData(updateForm)
+                    //  });
+
+                    // let result = await response.json();
+
+                    // alert(result.message);
+                    //  };
+            //         window.onload = function () {
+            //             const input = document.querySelector('input[type="file"]')
+            //             input.addEventListener('change', () => {
+            //             const file = input.files[0]
+            //             const formData = new FormData()
+            //             formData.append('productCode', <%= product.productCode %>)
+            //             formData.append('productImg', file)
+
+            //     fetch('/update', {
+            //       method: 'POST',
+            //       body: formData,
+            //     }).then(res => res.text()).then(res => {
+            //       console.log('res: ', res)
+            //     }).catch(console.log)
+            //   })
+
+            }
+        </script>
+    </body>
+</html>

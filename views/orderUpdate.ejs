@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/animate.css" />
+
+        <title><%= title %></title>
+
+        <link rel="stylesheet" href="/css/updatePage.css" />
+        <link href="/css/responsive.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="bg-contact2" style="background-image: url('/img/bg-img/bg-01.jpg')">
+            <div class="container-contact2">
+                <div class="wrap-contact2">
+                    <form action="/updateOrder" class="contact2-form validate-form" method="POST">
+                        <span class="contact2-form-title"> <%= title %> </span>
+
+                        <div class="wrap-input2 validate-input">
+                            <input class="input2" type="number" readonly value="<%= order.orderID %>" name="orderID" />
+                            <span class="focus-input2" data-placeholder="Order ID (Read Only)"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="text"
+                                value="<%= order.receiverName %>"
+                                name="receiverName"
+                                required
+                            />
+                            <span class="focus-input2" data-placeholder="Receiver Name"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="number"
+                                value="<%= order.receiverPhone %>"
+                                name="receiverPhone"
+                                required
+                            />
+                            <span class="focus-input2" data-placeholder="Receiver Phone"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="date"
+                                readonly
+                                value="<%= order.orderDate %>"
+                                name="orderDate"
+                            />
+                            <span class="focus-input2" data-placeholder="Order Date (Read Only)"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                readonly
+                                type="number"
+                                step="0.01"
+                                value="<%= order.totalPrice %>"
+                                name="totalPrice"
+                            />
+                            <span class="focus-input2" data-placeholder="Total Price (Read Only)"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <!-- <input class="input2" type="text" value="<%= order.status %>" name="orderDate" /> -->
+                            <select name="status" required>
+                                <% if(order.status == "Shipped") { %>
+                                <option selected><%= order.status %></option>
+                                <option value="In Process">In Porcess</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <% } %> <% if(order.status == "In Process") { %>
+                                <option selected><%= order.status %></option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <% } %> <% if(order.status == "Cancelled") { %>
+                                <option selected><%= order.status %></option>
+                                <option value="In Process">In Porcess</option>
+                                <option value="Shipped">Shipped</option>
+                                <% } %>
+                            </select>
+                            <span class="focus-input2" data-placeholder="Status"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="text"
+                                value="<%= order.shipAddress %>"
+                                name="shipAddress"
+                                required
+                            />
+                            <span class="focus-input2" data-placeholder="Ship Address"></span>
+                        </div>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input class="input2" type="text" value="<%= order.shipCity %>" name="shipCity" required />
+                            <span class="focus-input2" data-placeholder="Ship City"></span>
+                        </div>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="number"
+                                value="<%= order.shipPostalCode %>"
+                                name="shipPostalCode"
+                                required
+                            />
+                            <span class="focus-input2" data-placeholder="Ship Postal Code"></span>
+                        </div>
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="text"
+                                value="<%= order.shipState %>"
+                                name="shipState"
+                                required
+                            />
+                            <span class="focus-input2" data-placeholder="Ship State"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                readonly
+                                type="number"
+                                value="<%= order.customerID %>"
+                                name="customerID"
+                            />
+                            <span class="focus-input2" data-placeholder="Customer ID (Read Only)"></span>
+                        </div>
+
+                        <div class="container-contact2-form-btn">
+                            <div class="wrap-contact2-form-btn">
+                                <div class="contact2-form-bgbtn"></div>
+                                <button type="submit" class="contact2-form-btn">Update the Order</button>
+                            </div>
+                            <a href="/order" class="btn btn btn-info">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="/js/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="/js/bootstrap.min.js"></script>
+        <!-- Plugins js -->
+        <script src="/js/plugins.js"></script>
+        <!-- Active js -->
+        <script src="/js/active.js"></script>
+        <script src="/js/update.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "UA-23581568-13");
+        </script>
+    </body>
+</html>

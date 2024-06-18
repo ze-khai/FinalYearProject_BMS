@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Login Page</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+        <link rel="stylesheet" href="/css/login.css" />
+        <style>
+            #profile {
+                display: none;
+            }
+        </style>
+    </head>
+
+    <body class="img js-fullheight" style="background-image: url(/img/bg-img/login.jpg)">
+        <script>
+            if (document.cookie.indexOf("fb_token") > 0)
+                //user has already logged in with facebook - process should be automatic
+                var fb_status = true;
+            else var fb_status = false;
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: "972203906866619",
+                    cookie: true,
+                    status: fb_status,
+                    xfbml: true,
+                    version: "v11.0",
+                });
+
+                FB.getLoginStatus(function (response) {
+                    // if (localStorage.getItem('LogInDetail') == true) {
+                    //     response.status === 'connected';
+                    // }
+                    statusChangeCallback(response);
+                });
+            };
+
+            (function (d, s, id) {
+                var js,
+                    fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {
+                    return;
+                }
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            })(document, "script", "facebook-jssdk");
+
+            function statusChangeCallback(response) {
+                if (response.status === "connected") {
+                    console.log("Logged in and authenticated");
+                    setElement(true);
+                    testAPI();
+                } else {
+                    console.log("Not authenticated");
+                    setElement(false);
+                }
+            }
+
+            function checkLoginState() {
+                FB.getLoginStatus(function (response) {
+                    //window.location = "/";
+                    statusChangeCallback(response);
+                });
+            }
+
+            function testAPI() {
+                FB.api("/me?fields=name,email,picture.width(200).height(200)", function (response) {
+                    if (response && !response.error) {
+                        //console.log(response);
+                        console.log(response);
+
+                        buildProfile(response);
+                    }
+                });
+            }
+            function buildProfile(user) {
+                let profile = ` <form id="load-cart" action="/loadCart" method="POST">
+            <input type="number" hidden="true" id="fbId" value="${user.id}" name="fbId" />
+            <input type="text" hidden="true" id="fbId" value="${user.name}" name="name" />
+            <input type="text" hidden="true" id="fbId" value="${user.email}" name="email" />
+            <input type="text" hidden="true" id="fbId" value="${user.picture.data.url}" name="picture" />
+        </form>    
+                            `;
+                //fbId = user.id;
+                document.getElementById("fb-id-form").innerHTML = profile;
+                // document.getElementById("fb-btn").addEventListener("click", function () {
+                var form = document.getElementById("load-cart");
+                console.log(form);
+                form.submit();
+                //});
+            }
+
+            function setElement(isLoggedIn) {
+                if (isLoggedIn) {
+                    document.getElementById("fb-btn").style.display = "none";
+                } else {
+                    document.getElementById("fb-btn").style.display = "block";
+                }
+            }
+
+            //
+        </script>
+        <section class="ftco-section">
+            <div class="container">
+                <a href="/" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i>Home</a>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">Login Page</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="login-wrap p-0">
+                            <h3 class="mb-4 text-center">Staff Login</h3>
+                            <form action="/loginUser" class="signin-form" method="post">
+                                <div class="form-group">
+                                    <input type="text" name="Id" class="form-control" placeholder="Username" required />
+                                </div>
+                                <div class="form-group">
+                                    <input
+                                        id="password-field"
+                                        type="password"
+                                        name="password"
+                                        class="form-control"
+                                        placeholder="Password"
+                                        required
+                                    />
+                                    <span
+                                        toggle="#password-field"
+                                        class="fa fa-fw fa-eye field-icon toggle-password"
+                                    ></span>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="form-control btn btn-primary submit px-3">
+                                        Sign In
+                                    </button>
+                                </div>
+                                <div class="form-group d-md-flex">
+                                    <!-- <div class="w-50">
+                                        <label class="checkbox-wrap checkbox-primary"
+                                            >Remember Me
+                                            <input type="checkbox" checked />
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div> -->
+                                    <div class="w-50">
+                                        <label>Having login Problem? </label>
+                                    </div>
+                                    <div class="w-50">
+                                        <a href="#" style="color: #fff">Contact your Manager</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <h3 class="mb-4 text-center">Customer Login</h3>
+                            <div class="social d-flex text-center">
+                                <div id="fb-id-form"></div>
+                                <!-- <a href="/" class="px-2 py-2 mr-md-1 rounded" id='fb-btn' scope="public_profile,email"
+								onlogin="checkLoginState();"><span class="ion-logo-facebook mr-2"></span>
+								Facebook</a> -->
+                                <!-- <a href="/auth/facebook" class="btn btn-primary"
+                                    ><span class="fa fa-facebook"></span> Facebook</a
+                                > -->
+                                <div
+                                    class="fb-login-button"
+                                    id="fb-btn"
+                                    scope="public_profile,email"
+                                    onlogin="checkLoginState();"
+                                    data-width=""
+                                    data-size="large"
+                                    data-button-type="login_with"
+                                    data-layout="default"
+                                    data-auto-logout-link="false"
+                                    data-use-continue-as="false"
+                                ></div>
+                                <!-- <a id="logout" href="#" onclick="logout()">Logout</a> -->
+                                <!-- <a href="#" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span>
+								Twitter</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/popper.js"></script>
+
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+    </body>
+</html>

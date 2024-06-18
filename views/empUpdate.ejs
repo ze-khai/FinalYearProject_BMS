@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/animate.css" />
+
+        <title><%= title %></title>
+
+        <link rel="stylesheet" href="/css/updatePage.css" />
+        <link href="/css/responsive.css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="bg-contact2" style="background-image: url('/img/bg-img/bg-01.jpg')">
+            <div class="container-contact2">
+                <div class="wrap-contact2">
+                    <form action="/updateEmp" class="contact2-form validate-form" method="POST">
+                        <span class="contact2-form-title"> <%= title %> </span>
+
+                        <div class="wrap-input2 validate-input">
+                            <input
+                                id="readonly"
+                                class="input2"
+                                type="number"
+                                readonly
+                                value="<%= employee.employeeID %>"
+                                name="employeeID"
+                            />
+                            <span class="focus-input2" data-placeholder="Employee ID (Read Only)"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="text"
+                                pattern="[A-Za-z]+"
+                                value="<%= employee.lastName %>"
+                                name="lastName"
+                            />
+                            <span class="focus-input2" data-placeholder="Last Name"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input
+                                class="input2"
+                                type="text"
+                                pattern="[A-Za-z]+"
+                                value="<%= employee.firstName %>"
+                                name="firstName"
+                            />
+                            <span class="focus-input2" data-placeholder="First Name"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <input class="input2" pattern="[0-9].{0,10}" value="<%= employee.phone %>" name="phone" />
+                            <span class="focus-input2" data-placeholder="Phone"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                            <input class="input2" type="email" value="<%= employee.email %>" name="email" />
+                            <span class="focus-input2" data-placeholder="Email"></span>
+                        </div>
+
+                        <div class="wrap-input2 validate-input" data-validate="Required">
+                            <select name="jobTitle" required>
+                                <% if(employee.jobTitle == "Admin") { %>
+                                <option selected><%= employee.jobTitle %></option>
+                                <option value="Staff">Staff</option>
+                                <option value="Manager">Manager</option>
+                                <% } %> <% if(employee.jobTitle == "Manager") { %>
+                                <option selected><%= employee.jobTitle %></option>
+                                <option value="Staff">Staff</option>
+                                <option value="Admin">Admin</option>
+                                <% } %> <% if(employee.jobTitle == "Staff") { %>
+                                <option selected><%= employee.jobTitle %></option>
+                                <option value="Manager">Manager</option>
+                                <option value="Admin">Admin</option>
+                                <% } %>
+                            </select>
+                            <span class="focus-input2" data-placeholder="Job Title"></span>
+                        </div>
+
+                        <div class="container-contact2-form-btn">
+                            <div class="wrap-contact2-form-btn">
+                                <div class="contact2-form-bgbtn"></div>
+                                <button type="submit" class="contact2-form-btn">Update the Employee</button>
+                            </div>
+                            <a href="/employee" class="btn btn btn-info">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="/js/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="/js/bootstrap.min.js"></script>
+        <!-- Plugins js -->
+        <script src="/js/plugins.js"></script>
+        <!-- Active js -->
+        <script src="/js/active.js"></script>
+        <script src="/js/update.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "UA-23581568-13");
+        </script>
+    </body>
+</html>

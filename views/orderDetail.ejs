@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Order Management (List)</title>
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+        <link rel="stylesheet" href="/css/core-style.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <style>
+            body {
+                color: #566787;
+                background: #f5f5f5;
+                font-family: "Varela Round", sans-serif;
+                font-size: 13px;
+            }
+
+            h2 {
+                color: rgb(240, 236, 236);
+            }
+
+            /* Side Bar CSS */
+            .wrapper {
+                display: flex;
+                align-items: stretch;
+            }
+
+            .container-xl {
+                flex: 80%;
+            }
+
+            #sidebar.active {
+                margin-left: -250px;
+            }
+
+            #sidebar {
+                min-width: 200px;
+                max-width: 200px;
+                min-height: 100vh;
+                background: #7fdbff;
+                color: #fff;
+                transition: all 0.3s;
+                flex: 20%;
+            }
+
+            #sidebar .sidebar-header {
+                padding: 20px;
+                background: #435d7d;
+            }
+
+            #sidebar ul.components {
+                padding: 20px 0;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul p {
+                color: #fff;
+                padding: 10px;
+            }
+
+            #sidebar h3 {
+                color: rgb(240, 236, 236);
+            }
+
+            #sidebar ul li a {
+                padding: 10px;
+                font-size: 1.1em;
+                display: block;
+            }
+
+            #sidebar ul li a:hover {
+                color: #7386d5;
+                background: #fff;
+            }
+
+            #sidebar ul li.active > a,
+            a[aria-expanded="true"] {
+                color: #fff;
+                background: #6d7fcc;
+            }
+
+            .searchbar {
+                padding: 10px;
+            }
+
+            .searchbar input[type="text"] {
+                padding: 6px;
+                border: none;
+                margin-top: 8px;
+                margin-right: 16px;
+                font-size: 13px;
+            }
+            .searchbar input[type="submit"] {
+                padding: 6px;
+                margin-top: 12px;
+                margin-right: 16px;
+            }
+
+            @media (max-width: 768px) {
+                #sidebar {
+                    margin-left: -250px;
+                }
+
+                #sidebar.active {
+                    margin-left: 0;
+                }
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                // Activate tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+                // Select/Deselect checkboxes
+                var checkbox = $('table tbody input[type="checkbox"]');
+                $("#selectAll").click(function () {
+                    if (this.checked) {
+                        checkbox.each(function () {
+                            this.checked = true;
+                        });
+                    } else {
+                        checkbox.each(function () {
+                            this.checked = false;
+                        });
+                    }
+                });
+                checkbox.click(function () {
+                    if (!this.checked) {
+                        $("#selectAll").prop("checked", false);
+                    }
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Order</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li>
+                        <a href="/product">Inventory Management</a>
+                    </li>
+                    <% if(user.role != "Staff") { %>
+                    <li>
+                        <a href="/employee">Employee Management</a>
+                    </li>
+                    <% }; %>
+                    <li>
+                        <a href="/customer">Customer Management</a>
+                    </li>
+                    <li>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"
+                            >Order Management</a
+                        >
+                        <ul class="collapse list-unstyled show" id="pageSubmenu">
+                            <li>
+                                <a href="/order">Order List</a>
+                            </li>
+                            <li class="active">
+                                <a href="/orderDetail">Order Detail</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="searchbar">
+                            <form action="/searchOrderDetail" method="get">
+                                <input
+                                    autocomplete="false"
+                                    placeholder="Search Order ID"
+                                    name="searchOrderDetail"
+                                    type="text"
+                                />
+                                <input type="submit" class="btn btn-info" value="Search" id="submit" />
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="container-xl">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-6 title-left">
+                                    <h2><b> <%= title %> </b></h2>
+                                </div>
+                                <div class="col-sm-8 title-right">
+                                    <a href="/" class="btn btn-info"><i class="material-icons">&#xe88a;</i>Home</a>
+                                    <% if(user.role == "Admin") { %>
+                                    <a href="/analytics" class="btn btn-dark"
+                                        ><i class="material-icons">add_chart</i>Analytics</a
+                                    >
+                                    <% }; %>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Product Code</th>
+                                    <th>Size</th>
+                                    <th>Quantity</th>
+                                    <th>Product Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orderDetail.forEach(orderDetail => { %>
+                                <tr>
+                                    <td><%= orderDetail.orderID %></td>
+                                    <td><%= orderDetail.productCode %></td>
+                                    <td><%= orderDetail.size %></td>
+                                    <td><%= orderDetail.quantity %></td>
+                                    <td><%= orderDetail.productType %></td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Modal HTML -->
+
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    </body>
+</html>

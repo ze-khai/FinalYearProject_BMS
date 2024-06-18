@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="/img/core-img/maskable_icon_x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/img/core-img/maskable_icon_x512.png" />
+        <!-- Title  -->
+        <title>Khai Boutique | Cart</title>
+
+        <!-- Favicon  -->
+        <link rel="icon" href="/img/core-img/logoo.ico" />
+
+        <!-- Core Style CSS -->
+        <link rel="stylesheet" href="/css/core-style.css" />
+        <!-- <link rel="stylesheet" href="/style.css"> -->
+
+        <!-- Responsive CSS -->
+        <link href="/css/responsive.css" rel="stylesheet" />
+
+        <style>
+            #fb-btn {
+                top: 30px;
+                left: 20px;
+            }
+
+            #profile {
+                position: absolute;
+                top: 30px;
+                left: 70px;
+                display: none;
+            }
+
+            #empId {
+                position: absolute;
+                top: 30px;
+                left: 70px;
+            }
+
+            #login {
+                position: absolute;
+                top: 30px;
+                left: 100px;
+            }
+
+            .MapHeading {
+                padding: 15px;
+            }
+            .kuang3 {
+                background-image: url("/img/bg-img/location.jpg");
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%;
+                padding: 5%;
+            }
+
+            .noProduct {
+                padding: 200px;
+                text-align: center;
+            }
+
+            .updateCartIcon {
+                padding: 10px;
+            }
+
+            .removeCartIcon {
+                padding: 10px;
+            }
+            #shop-now {
+                color: rgb(228, 27, 27);
+            }
+        </style>
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <script>
+
+            <% if(user.Id && user.role) { %>
+                var Id = "<%= user.Id %>";
+                console.log(Id);
+                var role = "<%= user.role %>";
+                console.log(role);
+            <% }; %>
+        </script>
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <!-- ****** Header Area Start ****** -->
+            <header
+                class="header_area bg-img background-overlay-white"
+                style="background-image: url(/img/bg-img/bg-1.jpg)"
+            >
+                <!-- Top Header Area Start -->
+                <div class="top_header_area">
+                    <div class="container h-100">
+                        <% if(user.Id == null){ %>
+                        <a id="login" href="/login">Login</a>
+                        <% }; %>
+                        <!-- <div class="fb-login-button" id='fb-btn' scope="public_profile,email,user_birthday"
+                        onlogin="checkLoginState();" data-width="" data-size="medium" data-button-type="login_with"
+                        data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div> -->
+                        <% if(user.Id != null){ %>
+                        <div class="LogNavigation">
+                            <a class="button" href="/logout">
+                                <img src="/img/core-img/logout.png" />
+
+                                <div class="logout">LOGOUT</div>
+                            </a>
+                        </div>
+                        <% } else {%>
+                        <div class="LogNavigation">
+                            <a class="button" id="logout" href="#" onclick="logout()">
+                                <img src="/img/core-img/logout.png" />
+
+                                <div class="logout">LOGOUT</div>
+                            </a>
+                        </div>
+                        <% }; %> <% if(user.Id != null) { %>
+                        <p id="empId">Welcome, <%= user.Id %></p>
+                        <% }; %>
+                        <a id="profile" href="#profileD" data-toggle="modal">Profile</a>
+                        <div class="row h-100 align-items-center justify-content-end">
+                            <div class="col-12 col-lg-7">
+                                <div class="top_single_area d-flex align-items-center">
+                                    <!-- Logo Area -->
+                                    <div class="top_logo">
+                                        <a href="#"><img src="img/core-img/logo.png" alt="" /></a>
+                                    </div>
+                                    <!-- Cart & Menu Area -->
+                                    <div class="header-cart-menu d-flex align-items-center ml-auto">
+                                        <!-- Cart Area -->
+                                        <div class="cart">
+                                            <% console.log( cartItem[0]) %> <% if(typeof cartItem[0] === 'undefined') {
+                                            %>
+                                            <a href="#" id="header-cart-btn" target="_blank"
+                                                ><span class="cart_quantity">0</span><i class="ti-bag"></i> Your Bag
+                                                RM0.00</a
+                                            >
+                                            <ul class="cart-list">
+                                                <li class="total">
+                                                    <span class="pull-right">Total: RM0.00</span>
+                                                    <a href="/cart" class="btn btn-sm btn-cart">Cart</a>
+                                                    <a href="/checkout" class="btn btn-sm btn-checkout">Checkout</a>
+                                                </li>
+                                            </ul>
+                                            <% } else { %> <% var totalPrice = 0; %> <% cartItem.forEach(cartItem =>
+                                            totalPrice += cartItem.price * cartItem.quantity); %>
+                                            <a href="#" id="header-cart-btn" target="_blank"
+                                                ><span class="cart_quantity"><%= cartItem.length %></span
+                                                ><i class="ti-bag"></i> Your Bag RM<%= parseFloat(totalPrice).toFixed(2)
+                                                %></a
+                                            >
+                                            <ul class="cart-list">
+                                                <% cartItem.forEach(cartItem =>{ %>
+                                                <li>
+                                                    <a href="#" class="image"
+                                                        ><img
+                                                            src="/img/product-img/<%= cartItem.productImg %>"
+                                                            class="cart-thumb"
+                                                            alt=""
+                                                    /></a>
+                                                    <div class="cart-item-desc">
+                                                        <h6><a href="#"><%= cartItem.productName %></a></h6>
+                                                        <p>
+                                                            <%= cartItem.quantity %>x -
+                                                            <span class="price">RM<%= cartItem.price %></span>
+                                                        </p>
+                                                    </div>
+                                                    <span class="dropdown-product-remove"
+                                                        ><i class="icon-cross"></i
+                                                    ></span>
+                                                </li>
+                                                <% }); %>
+                                                <li class="total">
+                                                    <span class="pull-right"
+                                                        >Total: RM<%= parseFloat(totalPrice).toFixed(2) %></span
+                                                    >
+                                                    <a href="/cart" class="btn btn-sm btn-cart">Cart</a>
+                                                    <a href="/checkout" class="btn btn-sm btn-checkout">Checkout</a>
+                                                </li>
+                                            </ul>
+                                            <% }; %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="profileD" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Profile</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="<%= userCust.pic %>" />
+                                <br />
+                                <br />
+                                <label>Name: </label>
+                                <label id="fbName"><%= userCust.name %></label>
+                                <br />
+                                <label>ID: </label>
+                                <label id="fbId"><%= userCust.userID %></label>
+                                <br />
+                                <label>Email: </label>
+                                <label><%= userCust.email %></label>
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Header Area End -->
+                <div class="main_header_area">
+                    <div class="container h-100">
+                        <div class="row h-100">
+                            <div class="col-12 d-md-flex justify-content-between">
+                                <!-- Header Social Area -->
+                                <div class="header-social-area">
+                                    <a href="#" hidden="true"
+                                        ><span class="karl-level">Share</span>
+                                        <i class="fa fa-pinterest" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.facebook.com"
+                                        ><i class="fa fa-facebook" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.twitter.com"
+                                        ><i class="fa fa-twitter" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.linkedin.com"
+                                        ><i class="fa fa-linkedin" aria-hidden="true"></i
+                                    ></a>
+                                </div>
+                                <!-- Menu Area -->
+                                <div class="main-menu-area">
+                                    <nav class="navbar navbar-expand-lg align-items-start">
+                                        <button
+                                            class="navbar-toggler"
+                                            type="button"
+                                            data-toggle="collapse"
+                                            data-target="#karl-navbar"
+                                            aria-controls="karl-navbar"
+                                            aria-expanded="false"
+                                            aria-label="Toggle navigation"
+                                        >
+                                            <span class="navbar-toggler-icon"><i class="ti-menu"></i></span>
+                                        </button>
+
+                                        <div
+                                            class="collapse navbar-collapse align-items-start collapse"
+                                            id="karl-navbar"
+                                        >
+                                            <ul class="navbar-nav animated" id="nav">
+                                                <li class="nav-item active">
+                                                    <% if(user.Id != null) { %>
+                                                    <a class="nav-link" href="/">Home</a>
+                                                    <% } else { %>
+                                                    <a class="nav-link" href="/">Home</a>
+                                                    <% }; %>
+                                                </li>
+                                                <li class="nav-item dropdown">
+                                                    <a
+                                                        class="nav-link"
+                                                        href="/categories"
+                                                        id="karlDropdown"
+                                                        role="button"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false"
+                                                        >Categories</a
+                                                    >
+                                                </li>
+                                                <li class="nav-item"><a class="nav-link" href="/cart"> Cart</a></li>
+                                                <% if(user.Id != null) { %>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/product">Inventory Management</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/orderHistory/<%= user.Id %>"
+                                                        >Order History</a
+                                                    >
+                                                </li>
+                                                <% } else{ %>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/orderHistory/<%= userCust.userID %> "
+                                                        >Order History</a
+                                                    >
+                                                </li>
+                                                <% } %>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/checkout">Checkout</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <!-- Help Line -->
+                                <div class="help-line">
+                                    <a href="tel:+346573556778"><i class="ti-headphone-alt"></i> +34 657 3556 778</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- ****** Header Area End ****** -->
+
+            <!-- ****** Top Discount Area Start ****** -->
+            <section class="top-discount-area d-md-flex align-items-center">
+                <!-- Single Discount Area -->
+                <div class="single-discount-area">
+                    <h5>Free Shipping &amp; Returns</h5>
+                    <h6>BUY NOW</h6>
+                </div>
+                <!-- Single Discount Area -->
+                <div class="single-discount-area">
+                    <h5>20% Discount for KIDS Tops</h5>
+                    <h6>Have a look NOW</h6>
+                </div>
+                <!-- Single Discount Area -->
+                <div class="single-discount-area">
+                    <h5>New Arrivals of Woman Wears</h5>
+                    <h6>Let's go to buy</h6>
+                </div>
+            </section>
+            <!-- ****** Top Discount Area End ****** -->
+
+            <!-- ****** Cart Area Start ****** -->
+            <div class="cart_area section_padding_100 clearfix">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="cart-table clearfix">
+                                <h6 class="cartID" hidden="true"><%= cart.cartID %></h6>
+                                <% if(typeof cartItem[0] !== 'undefined'){ %>
+                                <table class="table table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Size</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var count = 0; %> <% cartItem.forEach(cartItem => { %>
+                                        <tr>
+                                            <td class="cart_product_img d-flex align-items-center">
+                                                <a href="#"
+                                                    ><img
+                                                        src="/img/product-img/<%= cartItem.productImg %>"
+                                                        alt="Product"
+                                                /></a>
+                                                <h6><%= cartItem.productName %></h6>
+                                            </td>
+                                            <td class="price">
+                                                <span>RM<%= parseFloat(cartItem.price).toFixed(2) %></span>
+                                            </td>
+                                            <td class="size"><span><%= cartItem.size %></span></td>
+                                            <td class="qty">
+                                                <div class="quantity">
+                                                    <span
+                                                        class="qty-minus"
+                                                        onclick="var effect = document.getElementById('qty<%= cartItem.cartProductCode %>'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"
+                                                        ><i class="fa fa-minus" aria-hidden="true"></i
+                                                    ></span>
+                                                    <form
+                                                        id="update-cart-form<%= cartItem.cartProductCode %>"
+                                                        method="post"
+                                                        action="/updateCartItem/<%= cart.cartID %>&<%= cartItem.cartProductCode %>"
+                                                    >
+                                                        <input
+                                                            type="number"
+                                                            class="qty-text"
+                                                            id="qty<%= cartItem.cartProductCode %>"
+                                                            step="1"
+                                                            min="1"
+                                                            max="99"
+                                                            name="quantity<%= cartItem.cartProductCode %>"
+                                                            value="<%= cartItem.quantity %>"
+                                                        />
+                                                    </form>
+
+                                                    <span
+                                                        class="qty-plus"
+                                                        onclick="var effect = document.getElementById('qty<%= cartItem.cartProductCode %>'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"
+                                                        ><i class="fa fa-plus" aria-hidden="true"></i
+                                                    ></span>
+                                                </div>
+                                            </td>
+                                            <td class="total_price">
+                                                <span
+                                                    >RM<%= parseFloat(cartItem.quantity * cartItem.price).toFixed(2)
+                                                    %></span
+                                                >
+                                            </td>
+                                            <td>
+                                                <a class="updateCartProduct<%= cartItem.cartProductCode %>" href="#"
+                                                    ><i class="fa fa-refresh updateCartIcon"></i
+                                                ></a>
+                                                <a
+                                                    class="removeCartProduct"
+                                                    href="/removeCartItem/<%= cart.cartID %>&<%= cartItem.cartProductCode %>"
+                                                    ><i class="fa fa-trash removeCartIcon"></i
+                                                ></a>
+                                            </td>
+                                            <script type="text/javascript">
+                                                var good = "<%= cartItem.cartProductCode %>";
+                                                console.log(good);
+                                                $(".updateCartProduct<%= cartItem.cartProductCode %>").on(
+                                                    "click",
+                                                    function () {
+                                                        //document.getElementById("update-cart-form").innerHTML = cartForm;
+                                                        console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                                                        var form = document.getElementById(
+                                                            "update-cart-form<%= cartItem.cartProductCode %>"
+                                                        );
+                                                        //console.log(form);
+                                                        form.submit();
+                                                        alert("Item have been updated");
+                                                    }
+                                                );
+                                                //window.onload = function WindowLoad(event) {
+                                                //$(document).ready(function () {
+
+                                                //});
+
+                                                //};
+                                                //window.onload = function WindowLoad(event) {
+
+                                                // };
+                                            </script>
+                                        </tr>
+
+                                        <% count++; }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="delete-cart-form"></div>
+
+                            <div class="cart-footer d-flex mt-30">
+                                <div class="back-to-shop w-50">
+                                    <a href="/categories">Continue shooping</a>
+                                </div>
+                                <div class="update-checkout w-50 text-right">
+                                    <a href="/clearCart/<%= cart.cartID %>" id="clear-cart">clear cart</a>
+                                    <!-- <a href="#" id="update-cart">Update cart</a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4"></div>
+                        <div class="col-12 col-md-6 col-lg-4"></div>
+                        <div class="col-12 col-lg-4">
+                            <div class="cart-total-area mt-70">
+                                <div class="cart-page-heading">
+                                    <h5>Cart total</h5>
+                                    <p>Final info</p>
+                                </div>
+
+                                <ul class="cart-total-chart">
+                                    <li>
+                                        <span>Subtotal</span> <span>RM<%= parseFloat(totalPrice).toFixed(2) %></span>
+                                    </li>
+                                    <li><span>Shipping</span> <span>Free</span></li>
+                                    <li>
+                                        <span><strong>Total</strong></span>
+                                        <span><strong>RM<%= parseFloat(totalPrice).toFixed(2) %></strong></span>
+                                    </li>
+                                </ul>
+                                <a href="/checkout" class="btn karl-checkout-btn">Proceed to checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>
+                <h2 class="noProduct">No Product In cart, <a id="shop-now" href="/categories">Shop now !!!</a></h2>
+                <% }; %>
+            </div>
+            <!-- ****** Cart Area End ****** -->
+
+            <!-- ****** Footer Area Start ****** -->
+            <footer class="footer_area">
+                <div class="container">
+                    <div class="row">
+                        <!-- Single Footer Area Start -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="single_footer_area">
+                                <div class="footer-logo">
+                                    <img src="/img/core-img/logo.png" alt="" />
+                                </div>
+                                <div class="copywrite_text d-flex align-items-center">
+                                    <p>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                        Copyright &copy;
+                                        <script>
+                                            document.write(new Date().getFullYear());
+                                        </script>
+                                        All rights reserved | Made with
+                                        <i class="fa fa-heart-o" aria-hidden="true"></i> by
+                                        <a href="https://colorlib.com" target="_blank">Colorlib</a> &amp; distributed by
+                                        <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Single Footer Area Start -->
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+                            <div class="single_footer_area">
+                                <ul class="footer_widget_menu">
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/categories">Categories</a></li>
+                                    <li><a href="/cart">Cart</a></li>
+                                    <li><a href="/orderHistory/<%= userCust.userID %>">Order History</a></li>
+                                    <li><a href="/checkout">Checkout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Single Footer Area Start -->
+                    </div>
+                    <div class="line"></div>
+
+                    <!-- Footer Bottom Area Start -->
+                    <div class="footer_bottom_area">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="footer_social_area text-center">
+                                    <a href="https://www.facebook.com "
+                                        ><i class="fa fa-facebook" aria-hidden="true"></i
+                                    ></a>
+                                    <a href="https://www.twitter.com"
+                                        ><i class="fa fa-twitter" aria-hidden="true"></i
+                                    ></a>
+                                    <a href=" https://www.linkedin.com"
+                                        ><i class="fa fa-linkedin" aria-hidden="true"></i
+                                    ></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- ****** Footer Area End ****** -->
+        </div>
+        <!-- /.wrapper end -->
+
+        <!-- jQuery (Necessary for All JavaScript Plugins) -->
+        <!-- <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></script> -->
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="/js/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="/js/bootstrap.min.js"></script>
+        <!-- Plugins js -->
+        <script src="/js/plugins.js"></script>
+        <!-- Active js -->
+        <script src="/js/active.js"></script>
+        <script src="/js/serviceWorker.js"></script>
+        <script src="/js/fb.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+        <!--Start of Tawk.to Script-->
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {},
+                Tawk_LoadStart = new Date();
+            (function () {
+                var s1 = document.createElement("script"),
+                    s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = "https://embed.tawk.to/5f567ba44704467e89ece0df/default";
+                s1.charset = "UTF-8";
+                s1.setAttribute("crossorigin", "*");
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+
+            //document.querySelector(".");
+
+            function removeProduct() {
+                alert("Item have been removed from Cart");
+            }
+            function removeProduct(event, userId) {
+                console.log(
+                    event.target.parentElement.parentElement.parentElement.children[0].getElementsByTagName("h6")[0]
+                        .innerText
+                );
+                console.log(
+                    event.target.parentElement.parentElement.parentElement.children[2].getElementsByTagName("span")[0]
+                        .innerText
+                );
+                // console.log(event.parentElement.parentElement.children[0].textContent);
+                var items = [];
+                var name =
+                    event.target.parentElement.parentElement.parentElement.children[0].getElementsByTagName("h6")[0]
+                        .innerText;
+                var size =
+                    event.target.parentElement.parentElement.parentElement.children[2].getElementsByTagName("span")[0]
+                        .innerText;
+                JSON.parse(localStorage.getItem("cartProduct" + userId)).map((data) => {
+                    if (data.productName != name || (data.productName == name && data.size != size)) {
+                        items.push(data);
+                        console.log("Cart deleted");
+                    }
+                });
+                localStorage.setItem("cartProduct" + userId, JSON.stringify(items));
+                alert("Removed from Cart");
+                window.location.reload();
+            }
+        </script>
+        <!--End of Tawk.to Script-->
+    </body>
+</html>
